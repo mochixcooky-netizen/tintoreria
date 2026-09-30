@@ -1,47 +1,25 @@
-# Financiero
+# Módulo 6 — 7 soluciones en 3 etapas
 
-Dashboard de ingresos, egresos y balance. Es el proyecto más universal del módulo: no depende de WhatsApp para ser útil y es la mejor introducción a manejar datos y gráficos.
+Las 7 soluciones se enseñan con el mismo patrón. El alumno aprende el esqueleto una vez y después lo adapta al negocio.
 
-## Cómo se trabaja este proyecto
+**Sistema unificado:** abrí `demo/index.html`. Ahí están los 7 módulos juntos, con un menú y datos compartidos (una venta de stock suma un ingreso, un presupuesto crea el lead en CRM, etc.).
 
-Se construye en 3 etapas. No saltees etapas: cada una reutiliza lo que ya viste funcionar.
+| # | Proyecto | Carpeta |
+|---|----------|---------|
+| 1 | Financiero | `01-Financiero` |
+| 2 | Cobranza | `02-Cobranza` |
+| 3 | Stock | `03-Stock` |
+| 4 | Presupuestos | `04-Presupuestos` |
+| 5 | CRM | `05-CRM` |
+| 6 | Coordinador de Tareas | `06-Coordinador-de-Tareas` |
+| 7 | Postventa | `07-Postventa` |
 
-### Etapa 1 — Demo local (lista)
+## Cómo se trabaja cada proyecto
 
-Archivos en la raíz: `index.html` + `style.css` + `script.js`
+El detalle de cada solución está en el `README.md` de su carpeta. El patrón es siempre el mismo:
 
-Cómo correrlo:
+1. **Etapa 1** — HTML + CSS + JS local, datos mock. Abrís `index.html` en la raíz de cada carpeta y ya funciona.
+2. **Etapa 2** — React + Express + PostgreSQL, deploy en Railway.
+3. **Etapa 3** — WhatsApp con Evolution API y/o Kapso.
 
-1. Abrí `index.html` en el navegador, o
-2. Usá Live Server en VS Code / Cursor sobre esta carpeta.
-
-Qué vas a ver:
-
-- Tarjetas de ingresos, egresos y balance del mes
-- Gráfico de barras por semana (Chart.js por CDN)
-- Tabla de movimientos filtrable por categoría
-- ABM de movimientos (alta, edición y baja). Los cambios se guardan en el navegador.
-
-Los datos son un array hardcodeado en `script.js`. Cero instalación.
-
-### Etapa 2 — Herramienta real (pendiente)
-
-React (Vite) + Express + PostgreSQL.
-
-- Tabla `movimientos` (fecha, tipo ingreso/egreso, categoría, monto, producto o servicio asociado)
-- Cálculo de balance en tiempo real y filtro por producto para ver rentabilidad
-- Deploy en Railway con el plugin de Postgres
-
-### Etapa 3 — WhatsApp (pendiente)
-
-Alerta automática por WhatsApp (Evolution API) cuando los gastos superan cierto porcentaje de los ingresos del mes, o un resumen semanal enviado al dueño todos los lunes.
-
-## Estructura
-
-```
-01-Financiero/
-  README.md
-  index.html
-  style.css
-  script.js
-```
+Orden sugerido para construir y enseñar: Financiero → CRM → Postventa → Cobranza y Stock → el resto.
