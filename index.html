@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>05 CRM · Etapa 1</title>
+  <title>Demo · Tintorería y Lavadero</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
@@ -11,47 +11,381 @@
   <link rel="stylesheet" href="../branding/app.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
-<body>
-  <nav class="nav">
-    <div class="nav__inner">
-      <div class="nav__brand">
-        <img src="../branding/assets/logo-white.png" alt="ProfesIA" />
-        <span class="nav__mod">05 · CRM</span>
-      </div>
-      <div class="nav__right">
-        <span class="badge">Etapa 1</span>
-        <button type="button" id="btnNuevo">Nuevo lead</button>
-      </div>
+<body class="app">
+  <aside class="sidebar">
+    <div class="sidebar__brand">
+      <img src="../branding/assets/logo-white.png" alt="ProfesIA" />
+      <span>Tintorería</span>
     </div>
-    <div class="nav__bar"></div>
-  </nav>
-  <header class="page-head">
-    <h1>Seguimiento comercial / CRM</h1>
-    <p>Arrastrá las tarjetas · ABM de leads</p>
-  </header>
+    <nav class="sidebar__nav" id="menu">
+      <a href="#inicio" data-view="inicio" class="on"><span>00</span> Inicio</a>
+      <a href="#financiero" data-view="financiero"><span>01</span> Financiero</a>
+      <a href="#cobranza" data-view="cobranza"><span>02</span> Cobranza</a>
+      <a href="#stock" data-view="stock"><span>03</span> Stock</a>
+      <a href="#presupuestos" data-view="presupuestos"><span>04</span> Presupuestos</a>
+      <a href="#crm" data-view="crm"><span>05</span> CRM</a>
+      <a href="#tareas" data-view="tareas"><span>06</span> Tareas</a>
+      <a href="#postventa" data-view="postventa"><span>07</span> Postventa</a>
+    </nav>
+    <p class="sidebar__foot">Tintorería y lavadero · datos compartidos</p>
+  </aside>
 
-  <main>
-    <p class="leyenda">Nuevo → Contactado → Interesado → Esperando respuesta → Cerrado / Perdido</p>
-    <section class="kanban" id="tablero"></section>
-  </main>
+  <div class="shell">
+    <header class="topbar">
+      <button type="button" class="ghost sm" id="btnMenu">Menú</button>
+      <div>
+        <h1 id="topTitulo">Inicio</h1>
+        <p id="topSub">Las 7 soluciones en un solo sistema</p>
+      </div>
+      <span class="badge">Demo</span>
+    </header>
 
-  <dialog class="modal" id="modal">
-    <form id="formAbm">
-      <h2 id="modalTitulo">Nuevo lead</h2>
-      <input type="hidden" id="editId" />
-      <label>Nombre / empresa <input type="text" id="nombre" required /></label>
-      <label>Origen
-        <select id="origen">
-          <option>Instagram</option>
-          <option>WhatsApp</option>
-          <option>Web</option>
-          <option>Referido</option>
-          <option>Feria</option>
+    <div class="content">
+      <!-- INICIO -->
+      <section class="view on" id="view-inicio">
+        <header class="page-head">
+          <h2>Bienvenidos</h2>
+        </header>
+        <section class="kpis home" id="home-kpis"></section>
+        <section class="home-grid">
+          <article class="panel">
+            <div class="panel-head">
+              <h2>Ingresos vs. egresos</h2>
+              <p>Septiembre 2026 · se actualiza con Financiero y las ventas de Stock</p>
+            </div>
+            <div class="chart-box chart-box--wide">
+              <canvas id="homeChart"></canvas>
+            </div>
+          </article>
+          <article class="panel" id="home-alertas"></article>
+        </section>
+        <section class="panel">
+          <div class="panel-head row">
+            <div>
+              <h2>Un solo negocio</h2>
+              <p>Lo que cargás en un módulo aparece en los demás</p>
+            </div>
+            <button type="button" class="ghost" id="btnReset">Restaurar ejemplo</button>
+          </div>
+          <ul class="links">
+            <li>Una <strong>venta de productos</strong> (jabón, perfume textil) descuenta stock y genera un ingreso en Financiero.</li>
+            <li>Una <strong>compra de insumos</strong> (solvente, perchas, bolsas, tickets) genera un egreso en Financiero.</li>
+            <li>Al <strong>guardar un presupuesto</strong> (abono B2B, novia, cortinas) se crea o actualiza el lead en CRM.</li>
+            <li>Cobranza, CRM y Postventa hablan de los <strong>mismos clientes</strong>: hoteles, Airbnb, restaurantes, estética y vecinos.</li>
+          </ul>
+        </section>
+      </section>
+
+      <!-- FINANCIERO -->
+      <section class="view" id="view-financiero">
+        <section class="kpis" id="fin-kpis"></section>
+        <section class="panel">
+          <div class="panel-head">
+            <h2>Ingresos vs. egresos por semana</h2>
+            <p>Barras agrupadas · incluye ventas y compras registradas desde Stock</p>
+          </div>
+          <div class="chart-box chart-box--wide"><canvas id="chartSemanas"></canvas></div>
+        </section>
+        <section class="charts-grid">
+          <article class="panel">
+            <div class="panel-head"><h2>Balance acumulado</h2><p>Línea · mes día a día</p></div>
+            <div class="chart-box"><canvas id="chartLinea"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><h2>Flujo acumulado</h2><p>Área · ingresos y egresos</p></div>
+            <div class="chart-box"><canvas id="chartArea"></canvas></div>
+          </article>
+        </section>
+        <section class="charts-grid tres">
+          <article class="panel">
+            <div class="panel-head"><h2>Ingresos por categoría</h2><p>Torta</p></div>
+            <div class="chart-box"><canvas id="chartTorta"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><h2>Egresos por categoría</h2><p>Dona</p></div>
+            <div class="chart-box"><canvas id="chartDona"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><h2>Gasto sobre ingresos</h2><p>Gauge</p></div>
+            <div class="chart-box gauge-wrap">
+              <canvas id="chartGauge"></canvas>
+              <div class="gauge-center" id="gaugeLabel"></div>
+            </div>
+          </article>
+        </section>
+        <section class="charts-grid">
+          <article class="panel">
+            <div class="panel-head"><h2>Ranking de categorías</h2><p>Barras horizontales</p></div>
+            <div class="chart-box"><canvas id="chartHorizontal"></canvas></div>
+          </article>
+          <article class="panel">
+            <div class="panel-head"><h2>Peso de cada rubro</h2><p>Polar</p></div>
+            <div class="chart-box"><canvas id="chartPolar"></canvas></div>
+          </article>
+        </section>
+        <section class="panel">
+          <div class="panel-head row">
+            <div><h2>Movimientos</h2><p>ABM · filtro por categoría</p></div>
+            <div class="head-actions">
+              <label class="filtro">Categoría <select id="fin-filtro"></select></label>
+              <button type="button" id="fin-nuevo">Nuevo movimiento</button>
+            </div>
+          </div>
+          <div class="tabla-wrap">
+            <table>
+              <thead>
+                <tr><th>Fecha</th><th>Tipo</th><th>Categoría</th><th>Descripción</th><th class="num">Monto</th><th>ABM</th></tr>
+              </thead>
+              <tbody id="fin-tabla"></tbody>
+            </table>
+          </div>
+        </section>
+      </section>
+
+      <!-- COBRANZA -->
+      <section class="view" id="view-cobranza">
+        <section class="kpis" id="cob-kpis"></section>
+        <section class="layout">
+          <article class="panel">
+            <div class="panel-head row">
+              <div><h2>Cuentas por cobrar</h2><p>Saldos, señas y cuentas corrientes · mismos clientes que en CRM y Postventa</p></div>
+              <button type="button" id="cob-nuevo">Nueva cuenta</button>
+            </div>
+            <div class="tabla-wrap">
+              <table>
+                <thead>
+                  <tr><th>Cliente</th><th class="num">Monto</th><th>Vencimiento</th><th>Días de mora</th><th>Estado</th><th>ABM</th></tr>
+                </thead>
+                <tbody id="cob-tabla"></tbody>
+              </table>
+            </div>
+          </article>
+          <aside class="preview" id="cob-aviso"></aside>
+        </section>
+      </section>
+
+      <!-- STOCK -->
+      <section class="view" id="view-stock">
+        <section class="kpis cuatro" id="stk-kpis"></section>
+        <section class="layout stock-layout">
+          <article class="panel">
+            <div class="panel-head row">
+              <div><h2>Insumos y productos</h2><p>Una venta suma un ingreso en Financiero; una compra suma un egreso</p></div>
+              <div class="acciones">
+                <button type="button" class="ghost danger" id="stk-borrar-sel" hidden>Borrar seleccionados</button>
+                <button type="button" id="stk-nuevo">Nuevo producto</button>
+              </div>
+            </div>
+            <div class="toolbar">
+              <input type="search" id="stk-q" placeholder="Buscar SKU, producto o proveedor" />
+              <select id="stk-cat"></select>
+              <select id="stk-prov"></select>
+              <select id="stk-est">
+                <option value="todos">Todos los estados</option>
+                <option value="ok">OK</option>
+                <option value="reponer">A reponer</option>
+              </select>
+            </div>
+            <div class="tabla-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th class="check"><input type="checkbox" id="stk-all" /></th>
+                    <th><button type="button" class="th-sort" data-sort="sku">SKU</button></th>
+                    <th><button type="button" class="th-sort" data-sort="nombre">Producto</button></th>
+                    <th>Categoría</th>
+                    <th>Proveedor</th>
+                    <th class="num"><button type="button" class="th-sort" data-sort="stock">Stock</button></th>
+                    <th class="num">Mín.</th>
+                    <th>Estado</th>
+                    <th>ABM</th>
+                  </tr>
+                </thead>
+                <tbody id="stk-tabla"></tbody>
+              </table>
+            </div>
+            <p class="hint" id="stk-hint"></p>
+          </article>
+          <aside class="side">
+            <article class="panel" id="stk-lista"></article>
+            <article class="panel" id="stk-movs"></article>
+          </aside>
+        </section>
+      </section>
+
+      <!-- PRESUPUESTOS -->
+      <section class="view" id="view-presupuestos">
+        <main class="layout wide pre-layout">
+          <form class="panel" id="pre-form">
+            <h2>Armar presupuesto</h2>
+            <label>Cliente <input type="text" id="pre-cliente" value="Hotel Boutique Palermo" list="listaClientes" /></label>
+            <label>Producto / servicio <input type="text" id="pre-producto" value="Abono mensual: lavandería de blanquería (4 semanas)" /></label>
+            <label>Repeticiones (ej. semanas del abono) <input type="number" id="pre-cantidad" min="1" value="4" /></label>
+            <fieldset>
+              <legend>Prendas y servicios</legend>
+              <div id="pre-materiales"></div>
+              <button type="button" class="ghost" id="pre-add">+ Prenda / servicio</button>
+            </fieldset>
+            <label>Recargos y delivery (ARS) <input type="number" id="pre-mano" min="0" value="15000" /></label>
+            <div class="acciones-form">
+              <button type="button" id="pre-guardar">Guardar y enviar a CRM</button>
+              <button type="button" class="ghost" id="pre-nuevo">Nuevo</button>
+            </div>
+            <p class="hint">Al guardar se crea o actualiza el lead en CRM (etapa Interesado).</p>
+          </form>
+          <article class="panel presupuesto">
+            <div class="print-bar"><button type="button" id="pre-print">Imprimir presupuesto</button></div>
+            <div id="pre-doc"></div>
+          </article>
+          <section class="panel historial">
+            <h2>Historial</h2>
+            <div class="tabla-wrap">
+              <table>
+                <thead>
+                  <tr><th>Cliente</th><th>Producto / servicio</th><th>Rep.</th><th class="num">Total</th><th>ABM</th></tr>
+                </thead>
+                <tbody id="pre-tabla"></tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </section>
+
+      <!-- CRM -->
+      <section class="view" id="view-crm">
+        <div class="page-head crm-head">
+          <div>
+            <p class="leyenda">Nuevo → Contactado → Interesado → Esperando respuesta → Cerrado / Perdido</p>
+          </div>
+          <button type="button" id="crm-nuevo">Nuevo lead</button>
+        </div>
+        <section class="kanban crm-kanban" id="crm-tablero"></section>
+      </section>
+
+      <!-- TAREAS -->
+      <section class="view" id="view-tareas">
+        <div class="page-head crm-head">
+          <p class="leyenda">Arrastrá entre columnas · las vencidas aparecen en Inicio</p>
+          <button type="button" id="tar-nuevo">Nueva tarea</button>
+        </div>
+        <section class="kanban tar-kanban" id="tar-tablero"></section>
+      </section>
+
+      <!-- POSTVENTA -->
+      <section class="view" id="view-postventa">
+        <section class="kpis pos-kpis" id="pos-kpis"></section>
+        <section class="layout pos-layout">
+          <article class="panel listado">
+            <div class="panel-head row">
+              <div><h2>Clientes</h2><p>Ciclo de retorno · mismos nombres que Cobranza y CRM</p></div>
+              <button type="button" id="pos-nuevo">Nuevo cliente</button>
+            </div>
+            <div class="chips" id="pos-chips"></div>
+            <div class="clientes" id="pos-lista"></div>
+          </article>
+          <aside class="preview" id="pos-preview"></aside>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <datalist id="listaClientes"></datalist>
+  <datalist id="listaCatFin"></datalist>
+
+  <dialog class="modal" id="modal-fin">
+    <form id="form-fin">
+      <h2 id="fin-titulo">Nuevo movimiento</h2>
+      <input type="hidden" id="fin-id" />
+      <label>Fecha <input type="date" id="fin-fecha" required /></label>
+      <label>Tipo
+        <select id="fin-tipo">
+          <option value="ingreso">Ingreso</option>
+          <option value="egreso">Egreso</option>
         </select>
       </label>
-      <label>Detalle <input type="text" id="detalle" required /></label>
+      <label>Categoría <input type="text" id="fin-cat" required list="listaCatFin" /></label>
+      <label>Descripción <input type="text" id="fin-desc" required /></label>
+      <label>Monto <input type="number" id="fin-monto" min="1" required /></label>
+      <div class="modal-acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" class="ghost" data-close="modal-fin">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="modal-cob">
+    <form id="form-cob">
+      <h2 id="cob-titulo">Nueva cuenta</h2>
+      <input type="hidden" id="cob-id" />
+      <label>Cliente <input type="text" id="cob-cliente" required list="listaClientes" /></label>
+      <label>Monto <input type="number" id="cob-monto" min="1" required /></label>
+      <label>Vencimiento <input type="date" id="cob-vto" required /></label>
+      <div class="modal-acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" class="ghost" data-close="modal-cob">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal wide" id="modal-stk">
+    <form id="form-stk">
+      <h2 id="stk-titulo">Nuevo producto</h2>
+      <p class="form-error" id="stk-error" hidden></p>
+      <input type="hidden" id="stk-id" />
+      <div class="form-grid">
+        <label>SKU <input type="text" id="stk-sku" required placeholder="QUI-001" /></label>
+        <label>Categoría <select id="stk-categoria"></select></label>
+        <label class="full">Producto <input type="text" id="stk-nombre" required /></label>
+        <label>Proveedor <input type="text" id="stk-proveedor" required list="listaProveedores" /></label>
+        <label>Unidad
+          <select id="stk-unidad">
+            <option>unidad</option><option>bidón</option><option>paquete</option><option>rollo</option><option>bolsa</option><option>caja</option>
+            <option>kg</option><option>litro</option><option>metro</option>
+          </select>
+        </label>
+        <label>Stock actual <input type="number" id="stk-stock" min="0" required /></label>
+        <label>Stock mínimo <input type="number" id="stk-min" min="0" required /></label>
+        <label>Precio (ARS) <input type="number" id="stk-precio" min="0" required /></label>
+        <label>Ubicación <input type="text" id="stk-ubi" /></label>
+      </div>
+      <datalist id="listaProveedores"></datalist>
+      <div class="modal-acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" class="ghost" data-close="modal-stk">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="modal-mov">
+    <form id="form-mov">
+      <h2 id="mov-titulo">Movimiento de stock</h2>
+      <p class="hint" id="mov-prod"></p>
+      <p class="form-error" id="mov-error" hidden></p>
+      <input type="hidden" id="mov-id" />
+      <input type="hidden" id="mov-tipo" />
+      <label>Cantidad <input type="number" id="mov-cant" min="1" value="1" required /></label>
+      <label>Motivo <select id="mov-motivo"></select></label>
+      <div class="modal-acciones">
+        <button type="submit">Registrar</button>
+        <button type="button" class="ghost" data-close="modal-mov">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="modal-crm">
+    <form id="form-crm">
+      <h2 id="crm-titulo">Nuevo lead</h2>
+      <input type="hidden" id="crm-id" />
+      <label>Nombre / empresa <input type="text" id="crm-nombre" required list="listaClientes" /></label>
+      <label>Origen
+        <select id="crm-origen">
+          <option>Instagram</option><option>WhatsApp</option><option>Google Maps</option>
+          <option>Referido</option><option>Volanteo</option><option>Presupuesto</option>
+        </select>
+      </label>
+      <label>Detalle <input type="text" id="crm-detalle" required /></label>
       <label>Etapa
-        <select id="etapa">
+        <select id="crm-etapa">
           <option value="nuevo">Nuevo</option>
           <option value="contactado">Contactado</option>
           <option value="interesado">Interesado</option>
@@ -61,11 +395,55 @@
       </label>
       <div class="modal-acciones">
         <button type="submit">Guardar</button>
-        <button type="button" class="ghost" id="btnCancelar">Cancelar</button>
+        <button type="button" class="ghost" data-close="modal-crm">Cancelar</button>
       </div>
     </form>
   </dialog>
 
-  <script src="script.js"></script>
+  <dialog class="modal" id="modal-tar">
+    <form id="form-tar">
+      <h2 id="tar-titulo">Nueva tarea</h2>
+      <input type="hidden" id="tar-id" />
+      <label>Título <input type="text" id="tar-tit" required /></label>
+      <label>Responsable <input type="text" id="tar-persona" required /></label>
+      <label>Prioridad
+        <select id="tar-prio">
+          <option value="alta">Alta</option>
+          <option value="media">Media</option>
+          <option value="baja">Baja</option>
+        </select>
+      </label>
+      <label>Fecha límite <input type="date" id="tar-limite" required /></label>
+      <label>Estado
+        <select id="tar-estado">
+          <option value="todo">Por hacer</option>
+          <option value="doing">En proceso</option>
+          <option value="done">Hecho</option>
+        </select>
+      </label>
+      <div class="modal-acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" class="ghost" data-close="modal-tar">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog class="modal" id="modal-pos">
+    <form id="form-pos">
+      <h2 id="pos-titulo">Nuevo cliente</h2>
+      <input type="hidden" id="pos-id" />
+      <label>Cliente <input type="text" id="pos-nombre" required list="listaClientes" /></label>
+      <label>Última compra <input type="date" id="pos-ultima" required /></label>
+      <label>Frecuencia (días) <input type="number" id="pos-freq" min="1" required /></label>
+      <label>Producto / servicio <input type="text" id="pos-prod" required /></label>
+      <div class="modal-acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" class="ghost" data-close="modal-pos">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
