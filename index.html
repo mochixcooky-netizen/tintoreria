@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>01 Financiero · Etapa 1</title>
+  <title>04 Presupuestos · Etapa 1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
@@ -16,157 +16,65 @@
     <div class="nav__inner">
       <div class="nav__brand">
         <img src="../branding/assets/logo-white.png" alt="ProfesIA" />
-        <span class="nav__mod">01 · Financiero</span>
+        <span class="nav__mod">04 · Presupuestos</span>
       </div>
       <span class="badge">Etapa 1</span>
     </div>
     <div class="nav__bar"></div>
   </nav>
   <header class="page-head">
-    <h1>Financiero</h1>
-    <p>Demo local · datos de ejemplo · sin instalación</p>
+    <h1>Presupuestos</h1>
+    <p>Demo local · cálculo al instante · listo para imprimir</p>
   </header>
 
-  <main>
-    <section class="kpis" id="kpis"></section>
+  <main class="layout wide">
+    <form class="panel" id="formulario">
+      <h2>Armar presupuesto</h2>
+      <label>Cliente<input type="text" id="cliente" value="Familia Pérez" /></label>
+      <label>Producto / servicio<input type="text" id="producto" value="Mesa de comedor 6 pax" /></label>
+      <label>Cantidad<input type="number" id="cantidad" min="1" value="1" /></label>
 
-    <section class="panel">
-      <div class="panel-head">
-        <h2>Ingresos vs. egresos por semana</h2>
-        <p>Barras agrupadas · agosto 2026 · mueblería de ejemplo</p>
+      <fieldset>
+        <legend>Materiales</legend>
+        <div id="materiales"></div>
+        <button type="button" class="ghost" id="addMaterial">+ Material</button>
+      </fieldset>
+
+      <label>Mano de obra (ARS)<input type="number" id="manoObra" min="0" value="85000" /></label>
+      <div class="acciones-form">
+        <button type="button" id="btnGuardar">Guardar presupuesto</button>
+        <button type="button" class="ghost" id="btnNuevo">Nuevo</button>
       </div>
-      <div class="chart-box chart-box--wide">
-        <canvas id="chartSemanas"></canvas>
+      <p class="hint">El total se actualiza solo. Guardá para armar el historial (ABM).</p>
+    </form>
+
+    <article class="panel presupuesto" id="vista">
+      <div class="print-bar">
+        <button type="button" id="btnImprimir">Imprimir presupuesto</button>
       </div>
-    </section>
+      <div id="doc"></div>
+    </article>
 
-    <section class="charts-grid">
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Balance acumulado</h2>
-          <p>Línea · cómo va quedando el mes día a día</p>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartLinea"></canvas>
-        </div>
-      </article>
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Flujo acumulado</h2>
-          <p>Área · ingresos y egresos que se van sumando</p>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartArea"></canvas>
-        </div>
-      </article>
-    </section>
-
-    <section class="charts-grid tres">
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Ingresos por categoría</h2>
-          <p>Torta · de dónde entra la plata</p>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartTorta"></canvas>
-        </div>
-      </article>
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Egresos por categoría</h2>
-          <p>Dona · a dónde se va</p>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartDona"></canvas>
-        </div>
-      </article>
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Gasto sobre ingresos</h2>
-          <p>Gauge · qué % del ingreso ya se usó</p>
-        </div>
-        <div class="chart-box gauge-wrap">
-          <canvas id="chartGauge"></canvas>
-          <div class="gauge-center" id="gaugeLabel"></div>
-        </div>
-      </article>
-    </section>
-
-    <section class="charts-grid">
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Ranking de categorías</h2>
-          <p>Barras horizontales · volumen total del mes</p>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartHorizontal"></canvas>
-        </div>
-      </article>
-      <article class="panel">
-        <div class="panel-head">
-          <h2>Peso de cada rubro</h2>
-          <p>Polar · ingresos y egresos juntos</p>
-        </div>
-        <div class="chart-box">
-          <canvas id="chartPolar"></canvas>
-        </div>
-      </article>
-    </section>
-
-    <section class="panel">
-      <div class="panel-head row">
-        <div>
-          <h2>Movimientos</h2>
-          <p>Filtrá por categoría para ver de dónde sale o entra la plata</p>
-        </div>
-        <div class="head-actions">
-          <label class="filtro">
-            Categoría
-            <select id="filtroCategoria"></select>
-          </label>
-          <button type="button" id="btnNuevo">Nuevo movimiento</button>
-        </div>
-      </div>
+    <section class="panel historial">
+      <h2>Historial de presupuestos</h2>
+      <p class="hint">Alta, edición y baja de los presupuestos guardados</p>
       <div class="tabla-wrap">
         <table>
           <thead>
             <tr>
-              <th>Fecha</th>
-              <th>Tipo</th>
-              <th>Categoría</th>
-              <th>Descripción</th>
-              <th class="num">Monto</th>
+              <th>Cliente</th>
+              <th>Producto / servicio</th>
+              <th>Cant.</th>
+              <th class="num">Total</th>
               <th>ABM</th>
             </tr>
           </thead>
-          <tbody id="tablaMovimientos"></tbody>
+          <tbody id="tablaPresupuestos"></tbody>
         </table>
       </div>
     </section>
   </main>
 
-  <dialog class="modal" id="modal">
-    <form id="formAbm">
-      <h2 id="modalTitulo">Nuevo movimiento</h2>
-      <input type="hidden" id="editId" />
-      <label>Fecha <input type="date" id="fecha" required /></label>
-      <label>Tipo
-        <select id="tipo">
-          <option value="ingreso">Ingreso</option>
-          <option value="egreso">Egreso</option>
-        </select>
-      </label>
-      <label>Categoría <input type="text" id="categoria" required /></label>
-      <label>Descripción <input type="text" id="descripcion" required /></label>
-      <label>Monto <input type="number" id="monto" min="1" required /></label>
-      <div class="modal-acciones">
-        <button type="submit">Guardar</button>
-        <button type="button" class="ghost" id="btnCancelar">Cancelar</button>
-      </div>
-    </form>
-  </dialog>
-
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

@@ -1,45 +1,40 @@
-.head-actions { display: flex; gap: 0.7rem; align-items: flex-end; }
-.panel { margin-bottom: 1.25rem; }
-
-.charts-grid {
+fieldset {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--r-md);
+  padding: 0.6rem 0.8rem 0.9rem;
+  margin-top: 1rem;
+}
+.fila {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1rem;
-  margin-bottom: 1.25rem;
+  grid-template-columns: 1fr 110px 36px;
+  gap: 0.45rem;
+  align-items: end;
+  margin-top: 0.45rem;
 }
-.charts-grid.tres { grid-template-columns: repeat(3, 1fr); }
-.charts-grid .panel { margin-bottom: 0; }
-
-.chart-box { position: relative; height: 260px; }
-.chart-box--wide { height: 280px; }
-
-.gauge-wrap { height: 240px; }
-.gauge-center {
-  position: absolute;
-  left: 50%;
-  top: 62%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  pointer-events: none;
+.acciones-form { display: flex; gap: 0.5rem; margin-top: 0.4rem; }
+.presupuesto { min-height: 420px; }
+.print-bar { display: flex; justify-content: flex-end; }
+.doc-head {
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--navy);
+  padding-bottom: 0.8rem;
+  margin-bottom: 1rem;
 }
-.gauge-center strong {
-  display: block;
-  font-size: 1.7rem;
+.doc-head h3 { font-size: 1.4rem; font-weight: 900; color: var(--navy); }
+.total {
+  font-size: 1.35rem;
   font-weight: 900;
   color: var(--navy);
-  letter-spacing: -0.03em;
-  line-height: 1;
+  text-align: right;
+  margin-top: 0.6rem;
 }
-.gauge-center span {
-  display: block;
-  margin-top: 0.25rem;
-  font-size: 0.72rem;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--fg-3);
-}
+.layout .panel { margin-bottom: 0; }
+.historial { margin-top: 0; }
 
-@media (max-width: 960px) {
-  .charts-grid, .charts-grid.tres { grid-template-columns: 1fr; }
+@media print {
+  .nav, .page-head, form, .print-bar, .historial { display: none !important; }
+  body { background: #fff; }
+  .layout { display: block; padding: 0; max-width: none; }
+  .presupuesto { border: 0; box-shadow: none; }
 }

@@ -1,25 +1,47 @@
-# Módulo 6 — 7 soluciones en 3 etapas
+# Presupuestos
 
-Las 7 soluciones se enseñan con el mismo patrón. El alumno aprende el esqueleto una vez y después lo adapta al negocio.
+Formulario que arma un presupuesto imprimible a partir de producto, cantidades, materiales y mano de obra.
 
-**Sistema unificado:** abrí `demo/index.html`. Ahí están los 7 módulos juntos, con un menú y datos compartidos (una venta de stock suma un ingreso, un presupuesto crea el lead en CRM, etc.).
+## Cómo se trabaja este proyecto
 
-| # | Proyecto | Carpeta |
-|---|----------|---------|
-| 1 | Financiero | `01-Financiero` |
-| 2 | Cobranza | `02-Cobranza` |
-| 3 | Stock | `03-Stock` |
-| 4 | Presupuestos | `04-Presupuestos` |
-| 5 | CRM | `05-CRM` |
-| 6 | Coordinador de Tareas | `06-Coordinador-de-Tareas` |
-| 7 | Postventa | `07-Postventa` |
+Se construye en 3 etapas. No saltees etapas: cada una reutiliza lo que ya viste funcionar.
 
-## Cómo se trabaja cada proyecto
+### Etapa 1 — Demo local (lista)
 
-El detalle de cada solución está en el `README.md` de su carpeta. El patrón es siempre el mismo:
+Archivos en la raíz: `index.html` + `style.css` + `script.js`
 
-1. **Etapa 1** — HTML + CSS + JS local, datos mock. Abrís `index.html` en la raíz de cada carpeta y ya funciona.
-2. **Etapa 2** — React + Express + PostgreSQL, deploy en Railway.
-3. **Etapa 3** — WhatsApp con Evolution API y/o Kapso.
+Cómo correrlo:
 
-Orden sugerido para construir y enseñar: Financiero → CRM → Postventa → Cobranza y Stock → el resto.
+1. Abrí `index.html` en el navegador, o
+2. Usá Live Server en VS Code / Cursor sobre esta carpeta.
+
+Qué vas a ver:
+
+- Formulario (producto/servicio, cantidad, materiales, mano de obra)
+- Cálculo del total al instante con JS puro
+- Vista de presupuesto lista para imprimir
+- ABM de presupuestos: guardar, editar y borrar el historial
+
+No hay backend ni base de datos. Cero instalación.
+
+### Etapa 2 — Herramienta real (pendiente)
+
+React (Vite) + Express + PostgreSQL.
+
+- Catálogo de precios y materiales
+- Historial de presupuestos por cliente
+- PDF descargable
+
+### Etapa 3 — WhatsApp (pendiente)
+
+El cliente pide el presupuesto por WhatsApp respondiendo preguntas guiadas (Kapso o Evolution API) y recibe el PDF automáticamente en el mismo chat.
+
+## Estructura
+
+```
+04-Presupuestos/
+  README.md
+  index.html
+  style.css
+  script.js
+```
