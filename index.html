@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>04 Presupuestos · Etapa 1</title>
+  <title>05 CRM · Etapa 1</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;0,900;1,400&display=swap" rel="stylesheet" />
@@ -16,64 +16,55 @@
     <div class="nav__inner">
       <div class="nav__brand">
         <img src="../branding/assets/logo-white.png" alt="ProfesIA" />
-        <span class="nav__mod">04 · Presupuestos</span>
+        <span class="nav__mod">05 · CRM</span>
       </div>
-      <span class="badge">Etapa 1</span>
+      <div class="nav__right">
+        <span class="badge">Etapa 1</span>
+        <button type="button" id="btnNuevo">Nuevo lead</button>
+      </div>
     </div>
     <div class="nav__bar"></div>
   </nav>
   <header class="page-head">
-    <h1>Presupuestos</h1>
-    <p>Demo local · cálculo al instante · listo para imprimir</p>
+    <h1>Seguimiento comercial / CRM</h1>
+    <p>Arrastrá las tarjetas · ABM de leads</p>
   </header>
 
-  <main class="layout wide">
-    <form class="panel" id="formulario">
-      <h2>Armar presupuesto</h2>
-      <label>Cliente<input type="text" id="cliente" value="Familia Pérez" /></label>
-      <label>Producto / servicio<input type="text" id="producto" value="Mesa de comedor 6 pax" /></label>
-      <label>Cantidad<input type="number" id="cantidad" min="1" value="1" /></label>
-
-      <fieldset>
-        <legend>Materiales</legend>
-        <div id="materiales"></div>
-        <button type="button" class="ghost" id="addMaterial">+ Material</button>
-      </fieldset>
-
-      <label>Mano de obra (ARS)<input type="number" id="manoObra" min="0" value="85000" /></label>
-      <div class="acciones-form">
-        <button type="button" id="btnGuardar">Guardar presupuesto</button>
-        <button type="button" class="ghost" id="btnNuevo">Nuevo</button>
-      </div>
-      <p class="hint">El total se actualiza solo. Guardá para armar el historial (ABM).</p>
-    </form>
-
-    <article class="panel presupuesto" id="vista">
-      <div class="print-bar">
-        <button type="button" id="btnImprimir">Imprimir presupuesto</button>
-      </div>
-      <div id="doc"></div>
-    </article>
-
-    <section class="panel historial">
-      <h2>Historial de presupuestos</h2>
-      <p class="hint">Alta, edición y baja de los presupuestos guardados</p>
-      <div class="tabla-wrap">
-        <table>
-          <thead>
-            <tr>
-              <th>Cliente</th>
-              <th>Producto / servicio</th>
-              <th>Cant.</th>
-              <th class="num">Total</th>
-              <th>ABM</th>
-            </tr>
-          </thead>
-          <tbody id="tablaPresupuestos"></tbody>
-        </table>
-      </div>
-    </section>
+  <main>
+    <p class="leyenda">Nuevo → Contactado → Interesado → Esperando respuesta → Cerrado / Perdido</p>
+    <section class="kanban" id="tablero"></section>
   </main>
+
+  <dialog class="modal" id="modal">
+    <form id="formAbm">
+      <h2 id="modalTitulo">Nuevo lead</h2>
+      <input type="hidden" id="editId" />
+      <label>Nombre / empresa <input type="text" id="nombre" required /></label>
+      <label>Origen
+        <select id="origen">
+          <option>Instagram</option>
+          <option>WhatsApp</option>
+          <option>Web</option>
+          <option>Referido</option>
+          <option>Feria</option>
+        </select>
+      </label>
+      <label>Detalle <input type="text" id="detalle" required /></label>
+      <label>Etapa
+        <select id="etapa">
+          <option value="nuevo">Nuevo</option>
+          <option value="contactado">Contactado</option>
+          <option value="interesado">Interesado</option>
+          <option value="esperando">Esperando respuesta</option>
+          <option value="cerrado">Cerrado / Perdido</option>
+        </select>
+      </label>
+      <div class="modal-acciones">
+        <button type="submit">Guardar</button>
+        <button type="button" class="ghost" id="btnCancelar">Cancelar</button>
+      </div>
+    </form>
+  </dialog>
 
   <script src="script.js"></script>
 </body>

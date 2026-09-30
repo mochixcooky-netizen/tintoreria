@@ -1,6 +1,6 @@
-# Presupuestos
+# Seguimiento comercial / CRM
 
-Formulario que arma un presupuesto imprimible a partir de producto, cantidades, materiales y mano de obra.
+Tablero kanban de leads para que no se enfríen las oportunidades. Complementa lo que ya se enseña en 6.3.
 
 ## Cómo se trabaja este proyecto
 
@@ -17,29 +17,28 @@ Cómo correrlo:
 
 Qué vas a ver:
 
-- Formulario (producto/servicio, cantidad, materiales, mano de obra)
-- Cálculo del total al instante con JS puro
-- Vista de presupuesto lista para imprimir
-- ABM de presupuestos: guardar, editar y borrar el historial
+- Tablero kanban: Nuevo → Contactado → Interesado → Esperando respuesta → Cerrado / Perdido
+- Tarjetas de leads mock
+- Arrastre entre columnas con JS puro (HTML Drag and Drop)
+- ABM de leads (alta, edición y baja). Se guarda en el navegador.
 
-No hay backend ni base de datos. Cero instalación.
+Los datos son un array hardcodeado en `script.js`. Cero instalación.
 
 ### Etapa 2 — Herramienta real (pendiente)
 
 React (Vite) + Express + PostgreSQL.
 
-- Catálogo de precios y materiales
-- Historial de presupuestos por cliente
-- PDF descargable
+- Tabla `leads` (contacto, origen, etapa, última interacción, score)
+- Lógica de scoring simple basada en reglas (urgencia, presupuesto mencionado, etc.)
 
 ### Etapa 3 — WhatsApp (pendiente)
 
-El cliente pide el presupuesto por WhatsApp respondiendo preguntas guiadas (Kapso o Evolution API) y recibe el PDF automáticamente en el mismo chat.
+Evolution API dispara el mensaje de seguimiento cuando un lead lleva X días sin respuesta, y actualiza la etapa del pipeline según lo que el cliente conteste.
 
 ## Estructura
 
 ```
-04-Presupuestos/
+05-CRM/
   README.md
   index.html
   style.css

@@ -1,23 +1,24 @@
-const KEY = "m6-presupuestos";
-const pesos = (n) =>
-  (Number(n) || 0).toLocaleString("es-AR", { style: "currency", currency: "ARS", maximumFractionDigits: 0 });
+const KEY = "m6-crm-leads";
+const ETAPAS = [
+  { id: "nuevo", nombre: "Nuevo" },
+  { id: "contactado", nombre: "Contactado" },
+  { id: "interesado", nombre: "Interesado" },
+  { id: "esperando", nombre: "Esperando respuesta" },
+  { id: "cerrado", nombre: "Cerrado / Perdido" },
+];
+const SEED = [
+  { id: "l1", nombre: "Lucía Benítez", origen: "Instagram", detalle: "Consulta mesa a medida", etapa: "nuevo", dias: 0 },
+  { id: "l2", nombre: "Consorcio 9 de Julio", origen: "WhatsApp", detalle: "Presupuesto de herrería", etapa: "nuevo", dias: 1 },
+  { id: "l3", nombre: "Martín Vidal", origen: "Web", detalle: "Sesión de fotos de evento", etapa: "contactado", dias: 2 },
+  { id: "l4", nombre: "Hotel Felino Miau", origen: "Referido", detalle: "Plan mensual de hospedaje", etapa: "interesado", dias: 3 },
+  { id: "l5", nombre: "Textil Norte", origen: "Feria", detalle: "Pedido mayorista de tela", etapa: "esperando", dias: 6 },
+  { id: "l6", nombre: "Club del Sur", origen: "WhatsApp", detalle: "Auspicio de temporada", etapa: "esperando", dias: 8 },
+  { id: "l7", nombre: "Ana Rossi", origen: "Instagram", detalle: "Sillones para living", etapa: "cerrado", dias: 12 },
+];
+
 const esc = (s) =>
   String(s ?? "").replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-const uid = () => "pr-" + Date.now().toString(36);
-
-const SEED = [
-  {
-    id: "pr1",
-    cliente: "Familia Pérez",
-    producto: "Mesa de comedor 6 pax",
-    cantidad: 1,
-    manoObra: 85000,
-    materiales: [
-      { nombre: "Madera de paraíso", costo: 42000 },
-      { nombre: "Laca y herrajes", costo: 18500 },
-    ],
-  },
-];
+const uid = () => "l-" + Date.now().toString(36);
 
 function load() {
   try {
@@ -27,166 +28,108 @@ function load() {
   return SEED;
 }
 
-let presupuestos = load();
-let editandoId = null;
-let materiales = SEED[0].materiales.map((m) => ({ ...m }));
-const contenedor = document.getElementById("materiales");
+let leads = load();
+let draggingId = null;
 
 function persist() {
-  localStorage.setItem(KEY, JSON.stringify(presupuestos));
+  localStorage.setItem(KEY, JSON.stringify(leads));
 }
 
-function totalDe(d) {
-  const subMat = d.materiales.reduce((a, m) => a + (Number(m.costo) || 0), 0);
-  return (subMat + (Number(d.manoObra) || 0)) * (Number(d.cantidad) || 1);
-}
+function render() {
+  document.getElementById("tablero").innerHTML = ETAPAS.map((col) => {
+    const cards = leads.filter((l) => l.etapa === col.id);
+    return `
+      <section class="columna" data-col="${col.id}">
+        <header>
+          <h2>${col.nombre}</h2>
+          <span class="count">${cards.length}</span>
+        </header>
+        ${cards
+          .map(
+            (l) => `
+          <article class="tarjeta" draggable="true" data-id="${l.id}">
+            <h3>${esc(l.nombre)}</h3>
+            <p>${esc(l.detalle)}</p>
+            <p>${l.dias} día${l.dias === 1 ? "" : "s"} sin mover</p>
+            <span class="origen">${esc(l.origen)}</span>
+            <div class="acciones">
+              <button type="button" class="sm ghost" data-edit="${l.id}">Editar</button>
+              <button type="button" class="sm danger" data-del="${l.id}">Borrar</button>
+            </div>
+          </article>`
+          )
+          .join("")}
+      </section>`;
+  }).join("");
 
-function leerForm() {
-  return {
-    cliente: document.getElementById("cliente").value,
-    producto: document.getElementById("producto").value,
-    cantidad: Number(document.getElementById("cantidad").value) || 1,
-    manoObra: Number(document.getElementById("manoObra").value) || 0,
-    materiales: materiales.map((m) => ({ ...m })),
-  };
-}
-
-function cargarForm(d) {
-  document.getElementById("cliente").value = d.cliente;
-  document.getElementById("producto").value = d.producto;
-  document.getElementById("cantidad").value = d.cantidad;
-  document.getElementById("manoObra").value = d.manoObra;
-  materiales = d.materiales.map((m) => ({ ...m }));
-  renderMateriales();
-  renderDoc();
-}
-
-function renderMateriales() {
-  contenedor.innerHTML = materiales
-    .map(
-      (m, i) => `
-      <div class="fila">
-        <input data-i="${i}" data-k="nombre" value="${esc(m.nombre)}" />
-        <input data-i="${i}" data-k="costo" type="number" min="0" value="${m.costo}" />
-        <button type="button" class="icon" data-del="${i}">×</button>
-      </div>`
-    )
-    .join("");
-}
-
-function renderDoc() {
-  const d = leerForm();
-  const filas = d.materiales
-    .map((m) => `<tr><td>${esc(m.nombre) || "—"}</td><td class="num">${pesos(m.costo)}</td></tr>`)
-    .join("");
-  document.getElementById("doc").innerHTML = `
-    <div class="doc-head">
-      <div>
-        <h3>Presupuesto</h3>
-        <p>${esc(d.cliente)}</p>
-      </div>
-      <div>
-        <p>14/08/2026</p>
-        <p>Válido 15 días</p>
-      </div>
-    </div>
-    <p><strong>${esc(d.producto)}</strong> · cantidad ${d.cantidad}</p>
-    <table>
-      <thead><tr><th>Ítem</th><th class="num">Importe</th></tr></thead>
-      <tbody>
-        ${filas}
-        <tr><td>Mano de obra</td><td class="num">${pesos(d.manoObra)}</td></tr>
-      </tbody>
-    </table>
-    <p class="total">Total ${pesos(totalDe(d))}</p>
-  `;
-}
-
-function renderHistorial() {
-  document.getElementById("tablaPresupuestos").innerHTML = presupuestos
-    .map(
-      (p) => `
-      <tr>
-        <td>${esc(p.cliente)}</td>
-        <td>${esc(p.producto)}</td>
-        <td>${p.cantidad}</td>
-        <td class="num">${pesos(totalDe(p))}</td>
-        <td>
-          <div class="acciones">
-            <button type="button" class="sm ghost" data-edit="${p.id}">Editar</button>
-            <button type="button" class="sm danger" data-del="${p.id}">Borrar</button>
-          </div>
-        </td>
-      </tr>`
-    )
-    .join("");
-}
-
-document.getElementById("formulario").addEventListener("input", (e) => {
-  const input = e.target;
-  if (input.dataset.k) {
-    const i = Number(input.dataset.i);
-    materiales[i][input.dataset.k] = input.dataset.k === "costo" ? Number(input.value) : input.value;
-  }
-  renderDoc();
-});
-
-contenedor.addEventListener("click", (e) => {
-  const btn = e.target.closest("[data-del]");
-  if (!btn) return;
-  materiales.splice(Number(btn.dataset.del), 1);
-  renderMateriales();
-  renderDoc();
-});
-
-document.getElementById("addMaterial").addEventListener("click", () => {
-  materiales.push({ nombre: "Material nuevo", costo: 0 });
-  renderMateriales();
-  renderDoc();
-});
-
-document.getElementById("btnGuardar").addEventListener("click", () => {
-  const d = leerForm();
-  if (editandoId) {
-    const i = presupuestos.findIndex((p) => p.id === editandoId);
-    presupuestos[i] = { id: editandoId, ...d };
-  } else {
-    presupuestos.push({ id: uid(), ...d });
-  }
-  persist();
-  editandoId = null;
-  renderHistorial();
-});
-
-document.getElementById("btnNuevo").addEventListener("click", () => {
-  editandoId = null;
-  cargarForm({
-    cliente: "",
-    producto: "",
-    cantidad: 1,
-    manoObra: 0,
-    materiales: [{ nombre: "", costo: 0 }],
+  document.querySelectorAll(".tarjeta").forEach((el) => {
+    el.addEventListener("dragstart", () => {
+      draggingId = el.dataset.id;
+    });
   });
+
+  document.querySelectorAll(".columna").forEach((col) => {
+    col.addEventListener("dragover", (e) => {
+      e.preventDefault();
+      col.classList.add("over");
+    });
+    col.addEventListener("dragleave", () => col.classList.remove("over"));
+    col.addEventListener("drop", (e) => {
+      e.preventDefault();
+      col.classList.remove("over");
+      const lead = leads.find((l) => l.id === draggingId);
+      if (lead) {
+        lead.etapa = col.dataset.col;
+        lead.dias = 0;
+        persist();
+        render();
+      }
+    });
+  });
+}
+
+const modal = document.getElementById("modal");
+
+function abrir(item) {
+  document.getElementById("modalTitulo").textContent = item ? "Editar lead" : "Nuevo lead";
+  document.getElementById("editId").value = item?.id || "";
+  document.getElementById("nombre").value = item?.nombre || "";
+  document.getElementById("origen").value = item?.origen || "WhatsApp";
+  document.getElementById("detalle").value = item?.detalle || "";
+  document.getElementById("etapa").value = item?.etapa || "nuevo";
+  modal.showModal();
+}
+
+document.getElementById("btnNuevo").addEventListener("click", () => abrir(null));
+document.getElementById("btnCancelar").addEventListener("click", () => modal.close());
+
+document.getElementById("formAbm").addEventListener("submit", (e) => {
+  e.preventDefault();
+  const item = {
+    id: document.getElementById("editId").value || uid(),
+    nombre: document.getElementById("nombre").value.trim(),
+    origen: document.getElementById("origen").value,
+    detalle: document.getElementById("detalle").value.trim(),
+    etapa: document.getElementById("etapa").value,
+    dias: 0,
+  };
+  const i = leads.findIndex((l) => l.id === item.id);
+  if (i >= 0) leads[i] = { ...leads[i], ...item };
+  else leads.push(item);
+  persist();
+  modal.close();
+  render();
 });
 
-document.getElementById("tablaPresupuestos").addEventListener("click", (e) => {
+document.getElementById("tablero").addEventListener("click", (e) => {
   const edit = e.target.closest("[data-edit]");
   const del = e.target.closest("[data-del]");
-  if (edit) {
-    const p = presupuestos.find((x) => x.id === edit.dataset.edit);
-    editandoId = p.id;
-    cargarForm(p);
-  }
-  if (del && confirm("¿Borrar este presupuesto?")) {
-    presupuestos = presupuestos.filter((p) => p.id !== del.dataset.del);
-    if (editandoId === del.dataset.del) editandoId = null;
+  if (edit) abrir(leads.find((l) => l.id === edit.dataset.edit));
+  if (del && confirm("¿Borrar este lead?")) {
+    leads = leads.filter((l) => l.id !== del.dataset.del);
     persist();
-    renderHistorial();
+    render();
   }
 });
 
-document.getElementById("btnImprimir").addEventListener("click", () => window.print());
-
-renderMateriales();
-renderDoc();
-renderHistorial();
+render();
